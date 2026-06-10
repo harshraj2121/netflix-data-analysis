@@ -48,21 +48,46 @@ df['duration'] = df['duration'].fillna(median_duration)
 # plt.ylabel('Count')
 
 # chart 2 (Top 10 countries with most movies and tv shows)
-countries = (
-    df['country']
-    .str.split(',')
-    .explode()
-    .str.strip()
-    .value_counts()
-    .head(10)
-)
-plt.figure(figsize=(10, 6))
-plt.barh(countries.index, countries.values)
-plt.gca().invert_yaxis()  # Reverse the y-axis to have the highest count at the top
-plt.title('Top 10 Countries with Most Movies and TV Shows on Netflix')
-plt.xlabel('Count')
-plt.ylabel('Countries')
-plt.tight_layout()
-plt.show()
+# countries = (
+#     df['country']
+#     .str.split(',')
+#     .explode()
+#     .str.strip()
+#     .value_counts()
+#     .head(10)
+# )
+# plt.figure(figsize=(10, 6))
+# plt.barh(countries.index, countries.values)
+# plt.gca().invert_yaxis()  # Reverse the y-axis to have the highest count at the top
+# plt.title('Top 10 Countries with Most Movies and TV Shows on Netflix')
+# plt.xlabel('Count')
+# plt.ylabel('Countries')
+# plt.tight_layout()
 
-# print(countries)
+#chart 3 (content Release trend on Netflix)
+# plt.figure(figsize=(12,6))
+# plt.plot(
+#     df['release_year'].value_counts().sort_index().index,
+#     df['release_year'].value_counts().sort_index().values
+# )
+
+# plt.xlabel("Release Year")
+# plt.ylabel("Number of Titles")
+# plt.title("Netflix Content Released by Year")
+
+listed_in = df['listed_in'].str.split(',').explode().str.strip().value_counts()
+tv_shows = listed_in[listed_in.index.str.contains('TV')]
+not_tv_shows = listed_in[~listed_in.index.str.contains('TV')]
+plt.figure(figsize=(10, 6))
+plt.barh(tv_shows.index, tv_shows.values, label='TV Shows', color='blue')
+plt.barh(not_tv_shows.index, not_tv_shows.values, label='Movies', color='orange')
+plt.gca().invert_yaxis()
+plt.xlabel('Count')
+plt.title('Distribution of TV Shows and Movies by Genre on Netflix')
+plt.legend()
+plt.tight_layout()
+
+
+
+
+plt.show()
